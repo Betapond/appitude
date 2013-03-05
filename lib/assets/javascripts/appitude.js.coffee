@@ -2,38 +2,31 @@
 #= require underscore
 #= require backbone
 #= require jquery
+#= require ./appitude/stub_console
 
-setup = $.Deferred()
-
-fb = $.Deferred()
-fb.ready = ()->
-  if (arguments.length == 0)
-    fb.resolve()
-  else
-    fb.done.apply(fb, arguments)
+domReady = $.Deferred()
 
 $(document).ready ()->
-  setup.resolve()
+  domReady.resolve()
 
 views = {}
 
 loadView = (view, name)->
   el = $ view.prototype.el;
   if el.length > 0
-    views[name] ||= new view()
-    @App.trigger("view:loaded view:#{name}:loaded", views[name], name)
+    try
+      views[name] ||= new view()
+      @App.trigger("view:loaded view:#{name}:loaded", views[name], name)
+    catch error
+      console.error("Failed to load view: #{name}\n", error.message)
 
 addView = (name, properties = {})->
   view = Backbone.View.extend(properties)
-  setup.done ()->
+  domReady.done ()->
     loadView view, name
 
 @App =
-  setup: setup
-  fb: fb
   views: views
   addView: addView
 
 _.extend(@App, Backbone.Events)
-
-App.on('fb:ready')
