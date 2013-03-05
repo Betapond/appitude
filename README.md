@@ -6,7 +6,7 @@
 
 Add this line to your application's Gemfile:
 
-    gem 'appitude', :git => 'Betapond/appitude'
+    gem 'appitude', :github => 'Betapond/appitude'
 
 And then execute:
 
