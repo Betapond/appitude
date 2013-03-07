@@ -2,6 +2,7 @@
 #= require underscore
 #= require backbone
 #= require jquery
+#= require ./appitude/rails
 #= require ./appitude/stub_console
 
 domReady = $.Deferred()

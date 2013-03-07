@@ -7,6 +7,7 @@ fb.ready = ()->
     fb.done.apply(fb, arguments)
 
 
+# fbAsyncInit is called when all.js is loaded
 @fbAsyncInit = ()->
   throw new Error "Missing Facebook App Id" unless features.appId
   params =
