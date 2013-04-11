@@ -5,21 +5,23 @@
 #= require ./appitude/rails
 #= require ./appitude/stub_console
 
+views = []
+viewObjects = {}
+
 $(document).ready ()->
   loadViews()
 
 $(document).on 'page:change', ()->
+  view.remove() for view in viewObjects
+  viewObjects = {}
   loadViews()
 
-views = []
-viewObjects = {}
-
-loadViews = ()->
+loadViews = ()->§
   loadView.apply(this, view) for view in views
 
 loadView = (view, name)->
   el = $ view.prototype.el;
-  if el.length > 0 && !viewObjects[name]
+  if el.length > 0
     try
       viewObjects[name] ||= new view()
       @App.trigger("view:loaded view:#{name}:loaded", viewObjects[name], name)
