@@ -5,29 +5,34 @@
 #= require ./appitude/rails
 #= require ./appitude/stub_console
 
-domReady = $.Deferred()
-
 $(document).ready ()->
-  domReady.resolve()
+  loadViews()
 
-views = {}
+$(document).on 'page:change', ()->
+  loadViews()
+
+views = []
+viewObjects = {}
+
+loadViews = ()->
+  loadView.apply(this, view) for view in views
 
 loadView = (view, name)->
   el = $ view.prototype.el;
-  if el.length > 0
+  if el.length > 0 && !viewObjects[name]
     try
-      views[name] ||= new view()
-      @App.trigger("view:loaded view:#{name}:loaded", views[name], name)
+      viewObjects[name] ||= new view()
+      @App.trigger("view:loaded view:#{name}:loaded", viewObjects[name], name)
     catch error
       console.error("Failed to load view: #{name}\n", error.message)
 
 addView = (name, properties = {})->
   view = Backbone.View.extend(properties)
-  domReady.done ()->
-    loadView view, name
+  views.push [view, name]
 
 @App =
-  views: views
+  views: viewObjects
   addView: addView
 
 _.extend(@App, Backbone.Events)
+
