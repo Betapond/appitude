@@ -16,7 +16,7 @@ $(document).on 'page:change', ()->
   viewObjects = {}
   loadViews()
 
-loadViews = ()->§
+loadViews = ()->
   loadView.apply(this, view) for view in views
 
 loadView = (view, name)->
