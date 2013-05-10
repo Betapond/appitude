@@ -11,7 +11,7 @@ viewObjects = {}
 $(document).ready ()->
   loadViews()
 
-$(document).on 'page:change', ()->
+$(document).on 'page:load', ()->
   view.remove() for view in viewObjects
   viewObjects = {}
   loadViews()
