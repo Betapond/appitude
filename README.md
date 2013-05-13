@@ -25,25 +25,61 @@ App.on('view:loaded', function(view, name){
 // You can hook into the load event for specific views if you need to.
 App.on('view:base:loaded', function(view, name){
   console.debug('base view loaded', v);
+  view.setSomething('foo')
 });
 
 // adding a backbone view is simple
 // the view will be loaded on domready if the "el" element is present in the page
-App.addView('main', {
-  el: 'body',
-  events: {
-    'click .share': 'share'
-  },
 
-  initialize: function(){
+(function(){
+  var view = {
+    el: 'body',
+    events: {
+      'click .share': 'share'
+    },
 
-  },
+    initialize: function(){
 
-  share: function(){
+    },
 
+    share: function(){
+
+    }
   }
-});
 
+  App.addView('main', view);
+  # App.addView('main', view, {autoload: false});
+
+}).call(this);
+
+```
+
+How do I load a view that I have set to ```autoload: false```
+
+```
+// if main is already loaded, this will unload and reload the view
+App.loadView('main')
+// you can also pass options that will be passed to the view's initialize method
+App.loadView('posts', {posts: [...]})
+```
+
+How do I know what's loaded?
+
+```
+// in your javascript console
+App.debugViews()
+// => bookmarks, autoload: true, loaded: true
+// => customLike, autoload: true, loaded: true
+// => list, autoload: true, loaded: true
+// => main, autoload: true, loaded: true
+// => planner, autoload: false, loaded: true
+// => map, autoload: true, loaded: true
+// => place, autoload: true, loaded: false 
+```
+
+Accessing an already loaded view?
+```
+App.getView('main') // returns false if the view is not loaded
 ```
 
 ### Facebook Apps (WIP)
