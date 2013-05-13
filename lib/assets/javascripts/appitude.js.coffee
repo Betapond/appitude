@@ -5,36 +5,59 @@
 #= require ./appitude/rails
 #= require ./appitude/stub_console
 
-views = []
+views = {}
 viewObjects = {}
 
 $(document).ready ()->
-  loadViews()
+  autoloadViews()
 
 $(document).on 'page:load', ()->
-  view.remove() for view in viewObjects
-  viewObjects = {}
-  loadViews()
+  autoloadViews()
 
-loadViews = ()->
-  loadView.apply(this, view) for view in views
+getView = (name)->
+  views[name] || false
 
-loadView = (view, name)->
-  el = $ view.prototype.el;
+getViewObject = (name)->
+  if viewObjects.hasOwnProperty(name) then viewObjects[name].object else false
+
+unloadView = (name)->
+  if view = getView(name)
+    view.remove()
+    delete views[name]
+
+autoloadViews = ()->
+  loadView.call(App, name) for name, view of viewObjects when view.loadOptions.autoload is true
+
+loadView = (name, options = {})->
+  return unless view = getViewObject(name)
+  unloadView(name) # unload view before trying to load
+  el = $ view.prototype.el
   if el.length > 0
     try
-      viewObjects[name] ||= new view()
-      @App.trigger("view:loaded view:#{name}:loaded", viewObjects[name], name)
+      views[name] ||= new view(options)
+      App.trigger("view:loaded view:#{name}:loaded", views[name], name)
     catch error
-      console.error("Failed to load view: #{name}\n", error.message)
+      console.error("Failed to load view: #{name}\n", error.message, error)
 
-addView = (name, properties = {})->
+addView = (name, properties = {}, loadOptions = {})->
   view = Backbone.View.extend(properties)
-  views.push [view, name]
+  loadOptions = _.extend({autoload:true}, loadOptions)
+  viewObjects[name] = {object:view, loadOptions: loadOptions}
 
-@App =
-  views: viewObjects
+debugViews = ()->
+  _v = _.map viewObjects, (view, name)->
+    loaded = views.hasOwnProperty(name)
+    autoload = view.loadOptions.autoload
+    "#{name}, autoload: #{autoload}, loaded: #{loaded}"
+  console.debug(_v.join("\n"))
+
+App =
+  debugViews: debugViews
+  getView: getView
   addView: addView
+  loadView: loadView
+  unloadView: unloadView
 
-_.extend(@App, Backbone.Events)
+_.extend(App, Backbone.Events)
 
+@App = App
