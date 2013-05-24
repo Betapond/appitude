@@ -22,7 +22,7 @@ getViewObject = (name)->
 
 unloadView = (name)->
   if view = getView(name)
-    view.remove()
+    view.stopListening();
     delete views[name]
 
 autoloadViews = ()->
