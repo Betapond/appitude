@@ -19,5 +19,5 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'jquery-rails'
   gem.add_dependency 'coffee-rails'
-  gem.add_dependency 'backbone-rails'
+  gem.add_dependency 'backbone-rails', '~> 1.0'
 end
