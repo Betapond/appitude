@@ -11,9 +11,6 @@ viewObjects = {}
 $(document).ready ()->
   autoloadViews()
 
-$(document).on 'page:load', ()->
-  autoloadViews()
-
 getView = (name)->
   views[name] || false
 
