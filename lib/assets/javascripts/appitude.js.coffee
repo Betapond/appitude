@@ -8,9 +8,6 @@
 views = {}
 viewObjects = {}
 
-$(document).ready ()->
-  autoloadViews()
-
 getView = (name)->
   views[name] || false
 
@@ -22,7 +19,7 @@ unloadView = (name)->
     view.undelegateEvents();
     delete views[name]
 
-autoloadViews = ()->
+loadViews = ()->
   loadView.call(App, name) for name, view of viewObjects when view.loadOptions.autoload is true
 
 loadView = (name, options = {})->
@@ -53,6 +50,7 @@ App =
   getView: getView
   addView: addView
   loadView: loadView
+  loadViews: loadViews
   unloadView: unloadView
 
 _.extend(App, Backbone.Events)
