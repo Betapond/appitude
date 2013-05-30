@@ -29,7 +29,7 @@ App.on('view:base:loaded', function(view, name){
 });
 
 // adding a backbone view is simple
-// the view will be loaded on domready if the "el" element is present in the page
+// the view will be loaded automatically when you call App.loadViews() if the "el" element is present in the page
 
 (function(){
   var view = {
