@@ -40,8 +40,8 @@ fixFacebookWithTurbolinksForGreatJustice = ->
   justiceServed = true
 
 copyFbRoot = ->
-  $('#fb-root').detach()
-  
+  fb_root = $('#fb-root').detach()
+
 restoreFbRoot = ->
   if $('#fb-root').length > 0
     $('#fb-root').replaceWith fb_root
