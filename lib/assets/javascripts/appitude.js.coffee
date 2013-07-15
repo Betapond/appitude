@@ -20,7 +20,7 @@ unloadView = (name)->
     delete views[name]
 
 unloadViews = () ->
-  unloadView view for view in views
+  unloadView for view in views
 
 loadViews = ()->
   loadView.call(App, name) for name, view of viewObjects when view.loadOptions.autoload is true
@@ -55,6 +55,7 @@ App =
   loadView: loadView
   loadViews: loadViews
   unloadView: unloadView
+  unloadViews: unloadViews
 
 _.extend(App, Backbone.Events)
 
