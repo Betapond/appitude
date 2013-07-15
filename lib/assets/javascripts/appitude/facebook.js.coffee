@@ -28,6 +28,27 @@ features =
 
 _.extend(@App, {fb: features})
 
+# handle turbolinks stuff!
+fb_root = null
+justiceServed = false
+
+fixFacebookWithTurbolinksForGreatJustice = ->
+  document.addEventListener 'page:fetch', copyFbRoot
+  document.addEventListener 'page:change'. restoreFbRoot
+  document.addEventListener 'page:load', ->
+    FB?.XFBML.parse()
+  justiceServed = true
+
+copyFbRoot = ->
+  $('#fb-root').detach()
+  
+restoreFbRoot = ->
+  if $('#fb-root').length > 0
+    $('#fb-root').replaceWith fb_root
+  else
+    $('body').append fb_root
+
 # add the fb js script to the page
 $ ()->
   $.getScript("//connect.facebook.net/#{features.locale}/all.js")
+  fixFacebookWithTurbolinksForGreatJustice() unless justiceServed
