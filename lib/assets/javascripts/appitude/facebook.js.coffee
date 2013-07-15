@@ -34,9 +34,8 @@ justiceServed = false
 
 fixFacebookWithTurbolinksForGreatJustice = ->
   document.addEventListener 'page:fetch', copyFbRoot
-  document.addEventListener 'page:change'. restoreFbRoot
-  document.addEventListener 'page:load', ->
-    FB?.XFBML.parse()
+  document.addEventListener 'page:change', restoreFbRoot
+  document.addEventListener 'page:load', -> FB?.XFBML.parse()
   justiceServed = true
 
 copyFbRoot = ->
